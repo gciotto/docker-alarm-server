@@ -9,6 +9,6 @@ INI=${DIR}/configuration/LNLS-CON.ini
 
 OPT="-data ${DATA} -pluginCustomization ${INI} -consoleLog -vmargs -Djava.awt.headless=true -Xms64m -Xmx256m"
 
-echo "Starting alarm server with ${DIR}/${PROGRAM} ${OPT}"
+echo "Starting alarm server with '${DIR}/${PROGRAM} ${OPT} > ${LOGFILE} 2>&1'" 
 
-${DIR}/${PROGRAM} ${OPT}
+${DIR}/${PROGRAM} ${OPT} > ${LOGFILE} 2>&1
