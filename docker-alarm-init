@@ -1,0 +1,49 @@
+#!/bin/sh
+
+DIR=/opt/lnls-alarm-server/beast-alarm-server-4.1.1
+PROGRAM=AlarmServer
+
+LOGFILE=${DIR}/log/${PROGRAM}`date +'_%Y-%m-%d_%H:%M:%S'`.log
+PIDFILE=$DIR/$PROGRAM.pid
+DATA=/tmp/$PROGRAM.$$
+INI=$DIR/configuration/LNLS-CON.ini
+
+OPT="-data ${DATA} -pluginCustomization ${INI} -consoleLog -vmargs -Djava.awt.headless=true -Xms64m -Xmx256m"
+unset DISPLAY
+
+export PATH=$JAVA_HOME/bin:$PATH
+
+case $1 in
+start)
+    cd $DIR
+    ./$PROGRAM $OPT
+    echo $! > $PIDFILE
+    ;;
+stop)
+    if [ ! -f $PIDFILE ]
+    then
+       exit
+    fi
+    PID=`cat $PIDFILE`
+    FOUND=`ps aux | fgrep $PID | grep -v grep | grep --count $PROGRAM`
+    if [ $FOUND -eq 1 ]
+    then
+        kill $PID
+        rm $PIDFILE
+    else
+        echo "Cannot locate $PROGRAM under pid $PID"
+    fi
+    ;;
+status)
+    if [ ! -f $PIDFILE ]
+    then
+       echo "No pid"
+       exit
+    fi
+    PID=`cat $PIDFILE`
+    ps aux | fgrep $PID | grep -v grep
+    ;;
+*)
+    echo $0 "start | stop | status"
+esac
+
