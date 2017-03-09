@@ -37,6 +37,8 @@ COPY configuration/LNLS-CON.ini \
 RUN mkdir ./scripts
 RUN mkdir ./log
 
-COPY docker-start-beast.sh ./scripts/
+COPY docker-start-beast.sh \
+     docker-alarm-init \ 
+     scripts/
 
 WORKDIR /
