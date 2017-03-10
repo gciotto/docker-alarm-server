@@ -14,7 +14,6 @@ if [ ! -z ${CONTAINERS:+x} ]; then
 fi
 
 docker run -d --name=${DOCKER_RUN_NAME} --network=${NETWORK_ID} \
-    --entrypoint=${ALARM_FOLDER}/beast-alarm-server-4.1.1/scripts/${ALARM_START_SCRIPT} \
-    ${DOCKER_MANTAINER_NAME}/${DOCKER_NAME} start
+    ${DOCKER_MANTAINER_NAME}/${DOCKER_NAME}
 
 docker logs -f ${DOCKER_RUN_NAME}

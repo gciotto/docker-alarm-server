@@ -41,4 +41,6 @@ COPY docker-start-beast.sh \
      docker-alarm-init \ 
      scripts/
 
+CMD ["/opt/lnls-alarm-server/beast-alarm-server-4.1.1/scripts/docker-alarm-init", "start"]
+
 WORKDIR /
