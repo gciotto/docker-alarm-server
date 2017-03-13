@@ -3,7 +3,7 @@
 # Author: Gustavo Ciotto Pinton
 # LNLS - Brazilian Synchrotron Light Source Laboratory
 
-FROM debian:stretch
+FROM openjdk:latest
 
 MAINTAINER Gustavo Ciotto
 
@@ -41,6 +41,6 @@ COPY docker-start-beast.sh \
      docker-alarm-init \ 
      scripts/
 
-CMD ["/opt/lnls-alarm-server/beast-alarm-server-4.1.1/scripts/docker-alarm-init", "start"]
+WORKDIR /opt/lnls-alarm-server/beast-alarm-server-4.1.1/
 
-WORKDIR /
+CMD ["/opt/lnls-alarm-server/beast-alarm-server-4.1.1/scripts/docker-alarm-init", "start"]
