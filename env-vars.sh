@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 DOCKER_MANTAINER_NAME=gciotto
 DOCKER_NAME=alarm-server

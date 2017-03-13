@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
-source ./env-vars.sh
+. ./env-vars.sh
 
 git clone --branch=${GITHUB_ALARM_BRANCH} ${GITHUB_ALARM_REPO}
 
