@@ -1,46 +1,55 @@
-# Docker container for BEAST Alarm Server
-
+#
+# Docker image for BEAST Alarm Server
+#
 # Author: Gustavo Ciotto Pinton
 # LNLS - Brazilian Synchrotron Light Source Laboratory
+#
 
 FROM openjdk:latest
 
 MAINTAINER Gustavo Ciotto
 
+### Environment variables used by the image ###
+# Github environment variables
+ENV GITHUB_ALARM_REPO https://github.com/ControlSystemStudio/org.csstudio.alarmserver.product.git
+ENV GITHUB_ALARM_BRANCH master
+
+# Alarm operation-related variables
+ENV ALARM_FOLDER /opt/lnls-alarm-server
+ENV ALARM_START_SCRIPT docker-alarm-init
+ENV ALARM_VERSION beast-alarm-server-4.1.1
+
+# Update image and install required packages
+RUN apt-get -y update
+RUN apt-get install -y maven git openjdk-8-jdk
+
 # user root is required to install all needed packages
 USER root
-
-ENV ALARM_FOLDER /opt/lnls-alarm-server
 
 # create new folder and copy all scripts
 RUN mkdir -p ${ALARM_FOLDER}/build/scripts/
 
-COPY docker-update.sh \
-     docker-setup-beast.sh \
-     env-vars.sh \
+COPY scripts/setup-beast.sh \
      ${ALARM_FOLDER}/build/scripts/
 
 WORKDIR ${ALARM_FOLDER}/build/scripts/
 
-RUN ./docker-update.sh
-
-RUN ./docker-setup-beast.sh
-
-RUN cp -R ./org.csstudio.alarmserver.product/repository/target/products/beast-alarm-server/linux/gtk/x86_64/beast-alarm-server-4.1.1 /opt/lnls-alarm-server && \
-    rm -r ./org.csstudio.alarmserver.product
+# Clone and compile alarm source code
+RUN ./setup-beast.sh
         
-WORKDIR ${ALARM_FOLDER}/beast-alarm-server-4.1.1
+WORKDIR ${ALARM_FOLDER}/${ALARM_VERSION}
 
+# Copy provided configuration file
 COPY configuration/LNLS-CON.ini \
      ./configuration/
 
 RUN mkdir ./scripts
 RUN mkdir ./log
 
-COPY docker-start-beast.sh \
-     docker-alarm-init \ 
+COPY scripts/start-beast.sh \
+     scripts/alarm-service \ 
      scripts/
 
-WORKDIR /opt/lnls-alarm-server/beast-alarm-server-4.1.1/
+WORKDIR ${ALARM_FOLDER}/{ALARM_VERSION}/
 
-CMD ["/opt/lnls-alarm-server/beast-alarm-server-4.1.1/scripts/docker-alarm-init", "start"]
+CMD ["${ALARM_FOLDER}/${ALARM_VERSION}/scripts/alarm-service", "start"]
