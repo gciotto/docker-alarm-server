@@ -50,6 +50,6 @@ COPY scripts/start-beast.sh \
      scripts/alarm-service \ 
      scripts/
 
-WORKDIR ${ALARM_FOLDER}/{ALARM_VERSION}/
+WORKDIR ${ALARM_FOLDER}/${ALARM_VERSION}/
 
-CMD ["${ALARM_FOLDER}/${ALARM_VERSION}/scripts/alarm-service", "start"]
+CMD ["sh", "-c", "${ALARM_FOLDER}/${ALARM_VERSION}/scripts/alarm-service start"]
