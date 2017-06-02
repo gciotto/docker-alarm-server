@@ -4,7 +4,7 @@
 # A simple bash script to build a Docker image containing an instance of the BEAST alarm server
 #
 # Gustavo Ciotto Pinton
-# Controls Group
+# Controls Group - Brazilian Synchrotron Light Source Laboratory - LNLS
 #
 
 . ./env-vars.sh

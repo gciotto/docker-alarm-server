@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Essential environment variables
+
 DOCKER_MANTAINER_NAME=gciotto
 DOCKER_NAME=alarm-server
 DOCKER_RUN_NAME=alarm-server
