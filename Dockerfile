@@ -9,47 +9,32 @@ FROM openjdk:latest
 
 MAINTAINER Gustavo Ciotto
 
-### Environment variables used by the image ###
 # Github environment variables
 ENV GITHUB_ALARM_REPO https://github.com/ControlSystemStudio/org.csstudio.alarmserver.product.git
 ENV GITHUB_ALARM_BRANCH master
 
 # Alarm operation-related variables
 ENV ALARM_FOLDER /opt/lnls-alarm-server
-ENV ALARM_START_SCRIPT docker-alarm-init
 ENV ALARM_VERSION beast-alarm-server-4.1.1
 
 # Update image and install required packages
-RUN apt-get -y update
-RUN apt-get install -y maven git openjdk-8-jdk
-
-# user root is required to install all needed packages
-USER root
+RUN apt-get -y update && apt-get install -y maven git openjdk-8-jdk && rm -rf /var/lib/apt/lists/*
 
 # create new folder and copy all scripts
 RUN mkdir -p ${ALARM_FOLDER}/build/scripts/
 
-COPY scripts/setup-beast.sh \
-     ${ALARM_FOLDER}/build/scripts/
-
-WORKDIR ${ALARM_FOLDER}/build/scripts/
+COPY scripts/setup-beast.sh ${ALARM_FOLDER}/build/scripts/
 
 # Clone and compile alarm source code
-RUN ./setup-beast.sh
+RUN ${ALARM_FOLDER}/build/scripts/setup-beast.sh
         
-WORKDIR ${ALARM_FOLDER}/${ALARM_VERSION}
-
 # Copy provided configuration file
-COPY configuration/LNLS-CON.ini \
-     ./configuration/
+COPY configuration/LNLS-CON.ini ${ALARM_FOLDER}/${ALARM_VERSION}/configuration
 
-RUN mkdir ./scripts
-RUN mkdir ./log
+RUN mkdir ${ALARM_FOLDER}/${ALARM_VERSION}/scripts
 
-COPY scripts/start-beast.sh \
-     scripts/alarm-service \ 
-     scripts/
+COPY scripts/start-beast.sh ${ALARM_FOLDER}/${ALARM_VERSION}/scripts
 
-WORKDIR ${ALARM_FOLDER}/${ALARM_VERSION}/
+RUN mkdir ${ALARM_FOLDER}/${ALARM_VERSION}/log
 
-CMD ["sh", "-c", "${ALARM_FOLDER}/${ALARM_VERSION}/scripts/alarm-service start"]
+CMD ["sh", "-c", "${ALARM_FOLDER}/${ALARM_VERSION}/scripts/start-beast.sh"]
