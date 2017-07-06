@@ -17,3 +17,6 @@ git clone --branch=${GITHUB_ALARM_BRANCH} ${GITHUB_ALARM_REPO} ${TMP_FOLDER}
 # Copy and remove compiled binaries
 cp -R ./${TMP_FOLDER}/repository/target/products/beast-alarm-server/linux/gtk/x86_64/${ALARM_VERSION} ${ALARM_FOLDER}
 rm -r ./${TMP_FOLDER}
+
+# Remove maven repositories and packages
+rm -r ~/.m2
