@@ -1,14 +1,29 @@
 #!/bin/bash
 
-DIR=/opt/lnls-alarm-server/beast-alarm-server-4.1.1
-PROGRAM=AlarmServer
+# Log file used to register important events
+# LOGFILE=${ALARM_FOLDER}/${ALARM_VERSION}/log/AlarmServer`date +'_%Y-%m-%d_%H:%M:%S'`.log
 
-LOGFILE=${DIR}/log/${PROGRAM}`date +'_%Y-%m-%d_%H:%M:%S'`.log
+# Temporary data file
 DATA=/tmp/${PROGRAM}.$$
-INI=${DIR}/configuration/LNLS-CON.ini
 
-OPT="-data ${DATA} -pluginCustomization ${INI} -consoleLog -vmargs -Djava.awt.headless=true -Xms64m -Xmx256m"
+# Launching options
+OPT="-data ${DATA} -pluginCustomization ${ALARM_FOLDER}/${ALARM_VERSION}/configuration/LNLS-CON.ini -consoleLog -vmargs -Djava.awt.headless=true -Xms64m -Xmx256m"
 
-echo "Starting alarm server with '${DIR}/${PROGRAM} ${OPT} > ${LOGFILE} 2>&1'" 
+### Changes EPICS settings
 
-${DIR}/${PROGRAM} ${OPT} > ${LOGFILE} 2>&1
+# Updates list of hosts
+sed -i "s:org.csstudio.platform.libs.epics=.*$:org.csstudio.platform.libs.epics/addr_list=${EPICS_CA_ADDR_LIST}:" ${ALARM_FOLDER}/${ALARM_VERSION}/configuration/LNLS-CON.ini
+
+echo ${EPICS_CA_AUTO_ADDR_LIST}
+
+# Updates automatic search of epics variables
+if [ "${EPICS_CA_AUTO_ADDR_LIST}" = "NO" ] ; then
+
+	sed -i "s:org.csstudio.platform.libs.epics/auto_addr_list=.*$:org.csstudio.platform.libs.epics/auto_addr_list=false:" ${ALARM_FOLDER}/${ALARM_VERSION}/configuration/LNLS-CON.ini
+else
+
+	sed -i "s:org.csstudio.platform.libs.epics/auto_addr_list=.*$:org.csstudio.platform.libs.epics/auto_addr_list=true:" ${ALARM_FOLDER}/${ALARM_VERSION}/configuration/LNLS-CON.ini
+fi
+
+# Launches server
+${ALARM_FOLDER}/${ALARM_VERSION}/AlarmServer ${OPT} 2>&1
