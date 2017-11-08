@@ -12,7 +12,7 @@ OPT="-data ${DATA} -pluginCustomization ${ALARM_FOLDER}/${ALARM_VERSION}/configu
 ### Changes EPICS settings
 
 # Updates list of hosts
-sed -i "s:org.csstudio.platform.libs.epics=.*$:org.csstudio.platform.libs.epics/addr_list=${EPICS_CA_ADDR_LIST}:" ${ALARM_FOLDER}/${ALARM_VERSION}/configuration/LNLS-CON.ini
+sed -i "s:org.csstudio.platform.libs.epics/addr_list=.*$:org.csstudio.platform.libs.epics/addr_list=${EPICS_CA_ADDR_LIST}:" ${ALARM_FOLDER}/${ALARM_VERSION}/configuration/LNLS-CON.ini
 
 echo ${EPICS_CA_AUTO_ADDR_LIST}
 
