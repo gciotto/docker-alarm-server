@@ -25,5 +25,18 @@ else
 	sed -i "s:org.csstudio.platform.libs.epics/auto_addr_list=.*$:org.csstudio.platform.libs.epics/auto_addr_list=true:" ${ALARM_FOLDER}/${ALARM_VERSION}/configuration/LNLS-CON.ini
 fi
 
+# Waits for database and ActiveMQ to be ready before lauching server
+
+chmod +x ${ALARM_FOLDER}/${ALARM_VERSION}/scripts/wait-for-it/wait-for-it.sh
+
+${ALARM_FOLDER}/${ALARM_VERSION}/scripts/wait-for-it/wait-for-it.sh alarm-server-activemq:61616
+
+pg_isready -h alarm-server-postgres-db -p 5432
+PG_READY=$?
+while [  ${PG_READY} -ne 0 ]; do
+	pg_isready -h alarm-server-postgres-db -p 5432
+	PG_READY=$?
+done
+
 # Launches server
 ${ALARM_FOLDER}/${ALARM_VERSION}/AlarmServer ${OPT} 2>&1
