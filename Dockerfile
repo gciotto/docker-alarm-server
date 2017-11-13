@@ -7,7 +7,7 @@
 
 FROM openjdk:latest
 
-MAINTAINER Gustavo Ciotto
+MAINTAINER Gustavo Ciotto <gustavo.pinton@lnls.br>
 
 # Github environment variables
 ENV GITHUB_ALARM_REPO https://github.com/ControlSystemStudio/org.csstudio.alarmserver.product.git
