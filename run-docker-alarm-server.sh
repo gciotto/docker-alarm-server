@@ -27,6 +27,6 @@ fi
 
 # Runs a new instance of the Docker image
 docker run -d --name=${DOCKER_RUN_NAME} --network=${NETWORK_ID} \
-    ${DOCKER_MANTAINER_NAME}/${DOCKER_NAME}
+    ${DOCKER_MANTAINER_NAME}/${DOCKER_NAME}:${DOCKER_TAG}
 
 docker logs -f ${DOCKER_RUN_NAME}
