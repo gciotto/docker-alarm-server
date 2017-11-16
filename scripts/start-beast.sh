@@ -36,6 +36,7 @@ PG_READY=$?
 while [  ${PG_READY} -ne 0 ]; do
 	pg_isready -h alarm-server-postgres-db -p 5432
 	PG_READY=$?
+	sleep 1
 done
 
 # Launches server
