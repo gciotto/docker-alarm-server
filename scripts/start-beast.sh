@@ -7,7 +7,7 @@
 DATA=/tmp/${PROGRAM}.$$
 
 # Launching options
-OPT="-data ${DATA} -pluginCustomization ${ALARM_FOLDER}/${ALARM_VERSION}/configuration/LNLS-CON.ini -consoleLog -vmargs -Djava.awt.headless=true -Xms64m -Xmx256m"
+OPT="-data ${DATA} -pluginCustomization ${ALARM_FOLDER}/${ALARM_VERSION}/configuration/LNLS-CON.ini -consoleLog -vmargs -Djava.awt.headless=true -Xms64m -Xmx256m -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap"
 
 ### Changes EPICS settings
 
